@@ -137,7 +137,17 @@ public class MainMenuActivity extends SherlockFragmentActivity implements OnChec
 		Utils.loadProjectIfNeeded(this);
 		setMainMenuButtonContinueText();
 		findViewById(R.id.main_menu_button_continue).setEnabled(true);
-		StatusBarNotificationManager.INSTANCE.displayDialogs(this);
+		boolean dialogsAreShown = StatusBarNotificationManager.INSTANCE.displayDialogs(this);
+
+		String projectName = getIntent().getStringExtra(StatusBarNotificationManager.EXTRA_PROJECT_NAME);
+		if (projectName != null && !dialogsAreShown) {
+			ProjectManager.getInstance().loadProject(projectName, this, true);
+			if (ProjectManager.getInstance().getCurrentProject().getName().compareTo(projectName) == 0) {
+				Intent intent = new Intent(MainMenuActivity.this, ProjectActivity.class);
+				startActivity(intent);
+			}
+		}
+		getIntent().removeExtra(StatusBarNotificationManager.EXTRA_PROJECT_NAME);
 	}
 
 	@Override
