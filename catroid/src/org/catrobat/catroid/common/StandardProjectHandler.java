@@ -50,6 +50,7 @@ import org.catrobat.catroid.content.bricks.WaitBrick;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.FormulaElement;
 import org.catrobat.catroid.formulaeditor.FormulaElement.ElementType;
+import org.catrobat.catroid.formulaeditor.Functions;
 import org.catrobat.catroid.formulaeditor.UserVariable;
 import org.catrobat.catroid.formulaeditor.UserVariablesContainer;
 import org.catrobat.catroid.io.StorageHandler;
@@ -79,6 +80,7 @@ public class StandardProjectHandler {
 		String varRandomTo = context.getString(R.string.default_project_var_random_to);
 
 		Project defaultProject = new Project(context, projectName);
+		defaultProject.setDeviceData(context); // density anywhere here
 		StorageHandler.getInstance().saveProject(defaultProject);
 		ProjectManager.getInstance().setProject(defaultProject);
 
@@ -148,10 +150,14 @@ public class StandardProjectHandler {
 
 		backgroundSprite.addScript(backgroundStartScript);
 
-		FormulaElement randomElement = new FormulaElement(ElementType.FUNCTION, "RAND", null);
+		FormulaElement randomElement = new FormulaElement(ElementType.FUNCTION, Functions.RAND.toString(), null);
 		randomElement.setLeftChild(new FormulaElement(ElementType.USER_VARIABLE, varRandomFrom, randomElement));
 		randomElement.setRightChild(new FormulaElement(ElementType.USER_VARIABLE, varRandomTo, randomElement));
 		Formula randomWait = new Formula(randomElement);
+
+		FormulaElement waitOneOrTwoSeconds = new FormulaElement(ElementType.FUNCTION, Functions.RAND.toString(), null);
+		waitOneOrTwoSeconds.setLeftChild(new FormulaElement(ElementType.NUMBER, "1", waitOneOrTwoSeconds));
+		waitOneOrTwoSeconds.setRightChild(new FormulaElement(ElementType.NUMBER, "2", waitOneOrTwoSeconds));
 
 		// Mole 1 sprite
 		Sprite mole1Sprite = new Sprite(context.getString(R.string.default_project_sprites_mole_name) + " 1");
@@ -163,13 +169,17 @@ public class StandardProjectHandler {
 		Script mole1StartScript = new StartScript(mole1Sprite);
 		Script mole1WhenScript = new WhenScript(mole1Sprite);
 
+		// start script
 		SetSizeToBrick setSizeToBrick = new SetSizeToBrick(mole1Sprite, new Formula(30));
 		mole1StartScript.addBrick(setSizeToBrick);
 
 		ForeverBrick foreverBrick = new ForeverBrick(mole1Sprite);
 		mole1StartScript.addBrick(foreverBrick);
 
-		WaitBrick waitBrick = new WaitBrick(mole1Sprite, 1000);
+		PlaceAtBrick placeAtBrick = new PlaceAtBrick(mole1Sprite, -160, -110);
+		mole1StartScript.addBrick(placeAtBrick);
+
+		WaitBrick waitBrick = new WaitBrick(mole1Sprite, new Formula(waitOneOrTwoSeconds));
 		mole1StartScript.addBrick(waitBrick);
 
 		ShowBrick showBrick = new ShowBrick(mole1Sprite);
@@ -179,10 +189,7 @@ public class StandardProjectHandler {
 		setLookBrick.setLook(moleLookData1);
 		mole1StartScript.addBrick(setLookBrick);
 
-		PlaceAtBrick placeAtBrick = new PlaceAtBrick(mole1Sprite, 160, -85);
-		mole1StartScript.addBrick(placeAtBrick);
-
-		GlideToBrick glideToBrick = new GlideToBrick(mole1Sprite, 160, -70, 100);
+		GlideToBrick glideToBrick = new GlideToBrick(mole1Sprite, -160, -95, 100);
 		mole1StartScript.addBrick(glideToBrick);
 
 		setLookBrick = new SetLookBrick(mole1Sprite);
@@ -201,6 +208,7 @@ public class StandardProjectHandler {
 		LoopEndlessBrick loopEndlessBrick = new LoopEndlessBrick(mole1Sprite, foreverBrick);
 		mole1StartScript.addBrick(loopEndlessBrick);
 
+		// when script		
 		PlaySoundBrick playSoundBrick = new PlaySoundBrick(mole1Sprite);
 		playSoundBrick.setSoundInfo(soundInfo);
 		mole1WhenScript.addBrick(playSoundBrick);
@@ -228,13 +236,13 @@ public class StandardProjectHandler {
 		defaultProject.addSprite(mole2Sprite);
 
 		Script tempScript = mole2Sprite.getScript(0);
-		placeAtBrick = (PlaceAtBrick) tempScript.getBrick(5);
+		placeAtBrick = (PlaceAtBrick) tempScript.getBrick(2);
 		placeAtBrick.setXPosition(new Formula(160));
-		placeAtBrick.setYPosition(new Formula(-300));
+		placeAtBrick.setYPosition(new Formula(-110));
 
 		glideToBrick = (GlideToBrick) tempScript.getBrick(6);
 		glideToBrick.setXDestination(new Formula(160));
-		glideToBrick.setYDestination(new Formula(-280));
+		glideToBrick.setYDestination(new Formula(-95));
 
 		// Mole 3 sprite
 		Sprite mole3Sprite = mole1Sprite.clone();
@@ -243,13 +251,13 @@ public class StandardProjectHandler {
 		defaultProject.addSprite(mole3Sprite);
 
 		tempScript = mole3Sprite.getScript(0);
-		placeAtBrick = (PlaceAtBrick) tempScript.getBrick(5);
+		placeAtBrick = (PlaceAtBrick) tempScript.getBrick(2);
 		placeAtBrick.setXPosition(new Formula(-160));
-		placeAtBrick.setYPosition(new Formula(-300));
+		placeAtBrick.setYPosition(new Formula(-290));
 
 		glideToBrick = (GlideToBrick) tempScript.getBrick(6);
 		glideToBrick.setXDestination(new Formula(-160));
-		glideToBrick.setYDestination(new Formula(-280));
+		glideToBrick.setYDestination(new Formula(-275));
 
 		// Mole 4 sprite
 		Sprite mole4Sprite = mole1Sprite.clone();
@@ -258,13 +266,13 @@ public class StandardProjectHandler {
 		defaultProject.addSprite(mole4Sprite);
 
 		tempScript = mole4Sprite.getScript(0);
-		placeAtBrick = (PlaceAtBrick) tempScript.getBrick(5);
-		placeAtBrick.setXPosition(new Formula(-160));
-		placeAtBrick.setYPosition(new Formula(-85));
+		placeAtBrick = (PlaceAtBrick) tempScript.getBrick(2);
+		placeAtBrick.setXPosition(new Formula(160));
+		placeAtBrick.setYPosition(new Formula(-290));
 
 		glideToBrick = (GlideToBrick) tempScript.getBrick(6);
-		glideToBrick.setXDestination(new Formula(-160));
-		glideToBrick.setYDestination(new Formula(-70));
+		glideToBrick.setXDestination(new Formula(160));
+		glideToBrick.setYDestination(new Formula(-275));
 
 		StorageHandler.getInstance().saveProject(defaultProject);
 
