@@ -63,7 +63,7 @@ public class Formula implements Serializable {
 		Log.e("info", "public Formula(Integer value) { value = " + value);
 		if (value < 0) {
 			formulaTree = new FormulaElement(ElementType.OPERATOR, Operators.MINUS.toString(), null);
-			formulaTree.setRightChild(new FormulaElement(ElementType.NUMBER, "" + Math.abs(value), formulaTree));
+			formulaTree.setRightChild(new FormulaElement(ElementType.NUMBER, "" + (value * -1L), formulaTree));
 			internFormula = new InternFormula(formulaTree.getInternTokenList());
 		} else {
 			formulaTree = new FormulaElement(ElementType.NUMBER, value.toString(), null);
@@ -74,7 +74,7 @@ public class Formula implements Serializable {
 	public Formula(Double value) {
 		if (value < 0) {
 			formulaTree = new FormulaElement(ElementType.OPERATOR, Operators.MINUS.toString(), null);
-			formulaTree.setRightChild(new FormulaElement(ElementType.NUMBER, "" + Math.abs(value), formulaTree));
+			formulaTree.setRightChild(new FormulaElement(ElementType.NUMBER, "" + (value * -1D), formulaTree));
 			internFormula = new InternFormula(formulaTree.getInternTokenList());
 		} else {
 			formulaTree = new FormulaElement(ElementType.NUMBER, value.toString(), null);
@@ -85,7 +85,7 @@ public class Formula implements Serializable {
 	public Formula(Float value) {
 		if (value < 0) {
 			formulaTree = new FormulaElement(ElementType.OPERATOR, Operators.MINUS.toString(), null);
-			formulaTree.setRightChild(new FormulaElement(ElementType.NUMBER, "" + Math.abs(value), formulaTree));
+			formulaTree.setRightChild(new FormulaElement(ElementType.NUMBER, "" + (value * -1F), formulaTree));
 			internFormula = new InternFormula(formulaTree.getInternTokenList());
 		} else {
 			formulaTree = new FormulaElement(ElementType.NUMBER, value.toString(), null);
@@ -102,6 +102,12 @@ public class Formula implements Serializable {
 
 	public int interpretInteger(Sprite sprite) {
 		Double interpretedValue = formulaTree.interpretRecursive(sprite);
+		String tokenString = "";
+		for (InternToken token : formulaTree.getInternTokenList()) {
+			tokenString += token.getTokenStringValue();
+		}
+		Log.e("blah", "intern tokens: " + tokenString);
+		Log.e("blah", "interpreted value: " + interpretedValue);
 		return interpretedValue.intValue();
 	}
 
