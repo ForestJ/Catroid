@@ -32,6 +32,9 @@ import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.SoundInfo;
 import org.catrobat.catroid.common.StandardProjectHandler;
 import org.catrobat.catroid.content.Project;
+import org.catrobat.catroid.content.Script;
+import org.catrobat.catroid.content.Sprite;
+import org.catrobat.catroid.content.bricks.WaitBrick;
 import org.catrobat.catroid.io.StorageHandler;
 import org.catrobat.catroid.ui.MainMenuActivity;
 import org.catrobat.catroid.ui.ProgramMenuActivity;
@@ -339,10 +342,11 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		setServerURLToTestUrl();
 		UiTestUtils.createValidUser(getActivity());
 
-		String uploadButtonText = solo.getString(R.string.upload_button);
-
 		solo.clickOnButton(solo.getString(R.string.main_menu_upload));
-		solo.waitForText(uploadButtonText);
+
+		String uploadButtonText = solo.getString(R.string.upload_button);
+		assertTrue("Upload button not found within 5 secs!", solo.waitForText(uploadButtonText, 0, 5000));
+
 		solo.goBack();
 		solo.sleep(500);
 		solo.clickOnButton(uploadButtonText);
@@ -454,6 +458,11 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	}
 
 	private void uploadProject(String uploadProjectName, String uploadProjectDescription) {
+		// change project to a non default state
+		Sprite firstSprite = ProjectManager.getInstance().getCurrentProject().getSpriteList().get(0);
+		Script firstScript = firstSprite.getScript(0);
+		firstScript.addBrick(new WaitBrick(firstSprite, 1000));
+
 		solo.clickOnText(solo.getString(R.string.main_menu_upload));
 		solo.waitForText(uploadDialogTitle);
 
