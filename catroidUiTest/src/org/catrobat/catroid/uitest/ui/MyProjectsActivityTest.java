@@ -258,9 +258,17 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.sleep(200);
 
 		String myProjectsText = solo.getString(R.string.main_menu_programs);
+		assertTrue("Main-Menu not shown in 5 secs!", solo.waitForText(myProjectsText, 0, 5000));
 		solo.clickOnButton(myProjectsText);
-		UiTestUtils.clickOnTextInList(solo, solo.getString(R.string.default_project_name));
+
+		String defaultProjectName = solo.getString(R.string.default_project_name);
+		assertTrue("Program name not shown in 5 secs!", solo.waitForText(defaultProjectName, 0, 5000));
+		UiTestUtils.clickOnTextInList(solo, defaultProjectName);
+
+		String backgroundName = solo.getString(R.string.default_project_backgroundname);
+		assertTrue("Program does not open within 5 secs!", solo.waitForText(backgroundName));
 		UiTestUtils.clickOnBottomBar(solo, R.id.button_add);
+
 		if (!solo.waitForText(solo.getString(R.string.new_sprite_dialog_default_sprite_name), 0, 5000)) {
 			fail("Edit-Dialog not shown in 5 secs!");
 		}
