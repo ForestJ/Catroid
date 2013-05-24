@@ -131,10 +131,6 @@ public class PointToBrickTest extends ActivityInstrumentationTestCase2<ScriptAct
 		solo.clickOnText(solo.getString(R.string.delete));
 		solo.clickOnButton(solo.getString(R.string.yes));
 
-		assertTrue("Confirmation-dialog not shown",
-				solo.waitForText(solo.getString(R.string.dialog_confirm_delete_object_message), 0, 1000));
-		solo.clickOnText(solo.getString(R.string.yes));
-
 		solo.clickOnText(spriteName2);
 		solo.sleep(200);
 		solo.clickOnText(solo.getString(R.string.scripts));
