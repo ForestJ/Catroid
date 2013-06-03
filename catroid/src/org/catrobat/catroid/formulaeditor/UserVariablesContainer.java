@@ -145,4 +145,10 @@ public class UserVariablesContainer implements Serializable {
 			userVariable.setValue(0);
 		}
 	}
+
+	public void addProjectUserVariable(String varRandomFrom, double d) {
+		UserVariable userVariableToAdd = new UserVariable(varRandomFrom);
+		userVariableToAdd.setValue(d);
+		projectVariables.add(userVariableToAdd);
+	}
 }
