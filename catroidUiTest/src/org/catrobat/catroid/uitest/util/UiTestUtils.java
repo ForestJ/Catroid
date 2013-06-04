@@ -1406,4 +1406,8 @@ public class UiTestUtils {
 		}
 		solo.sleep(500);
 	}
+
+	public static void waitForText(Solo solo, String text) {
+		assertEquals("Text not found!", true, solo.waitForText(text, 0, 2000));
+	}
 }

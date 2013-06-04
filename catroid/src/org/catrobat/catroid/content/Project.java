@@ -183,6 +183,9 @@ public class Project implements Serializable {
 					List<Brick> brickList = currentScript.getBrickList();
 					if (brickList != null) {
 						for (Brick currentBrick : brickList) {
+							if (currentBrick == null) {
+								continue;
+							}
 							if (currentBrick.getClass().getSimpleName().equals(BroadcastBrick.class.getSimpleName())) {
 								addMessageToList(((BroadcastBrick) currentBrick).getSelectedMessage(), usedMessages);
 							} else if (currentBrick.getClass().getSimpleName()

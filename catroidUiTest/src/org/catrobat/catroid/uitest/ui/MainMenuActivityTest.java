@@ -376,7 +376,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		ProjectManager.INSTANCE.setProject(null);
 		solo.getCurrentActivity().startActivity(intent);
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		solo.sleep(500);
+		UiTestUtils.waitForText(solo, solo.getString(R.string.default_project_backgroundname));
 		assertEquals("Number of bricks in background sprite was wrong - standard project was overwritten", 6,
 				ProjectManager.INSTANCE.getCurrentProject().getSpriteList().get(0).getNumberOfBricks());
 	}
